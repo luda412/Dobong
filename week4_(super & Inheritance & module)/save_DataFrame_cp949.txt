@@ -1,0 +1,5 @@
+ProductNumber price mount
+P1001 2000 32
+P1002 3000 53
+P1003 5000 40
+P1004 10000 25

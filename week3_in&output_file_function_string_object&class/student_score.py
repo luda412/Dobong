@@ -58,6 +58,7 @@ class system:
         # 전체 평균
         total_score = 0
         for student in self.students:
+            # student[5]는 각 학생들의 총 점수가 저장되어 있음
             total_score += student[5]
 
         self.total_avg = total_score / (len(self.students) * 4)
@@ -66,8 +67,8 @@ class system:
         with open("student_Score.txt", "a") as f:
             ftotal_avg_string = f"전체 평균: {self.total_avg}"
             f.write(f"{ftotal_avg_string}\n")
-
         return self.total_avg
+
     def calculate_min_max_subjects(self):
         kor_scores = [int(student[1]) for student in self.students]
         max_kor = max(kor_scores)
