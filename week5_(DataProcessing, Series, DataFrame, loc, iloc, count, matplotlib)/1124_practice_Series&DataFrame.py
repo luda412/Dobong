@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib import rc  ### 이 줄과
-rc('font', family='AppleGothic') 			## 이 두 줄을
-plt.rcParams['axes.unicode_minus'] = False  ## 추가해줍니다.
+from matplotlib import rc
+rc('font', family='AppleGothic')
+plt.rcParams['axes.unicode_minus'] = False
 
 s1 = pd.Series([1, 2, 3])
 # print(s1)
