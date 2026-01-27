@@ -24,7 +24,7 @@ prompt2 = PromptTemplate.from_template(
 chain2 = LLMChain(llm=openai, prompt=prompt2, output_key="sentiment_score")
 
 prompt3 = PromptTemplate.from_template(
-    "다음 식장 리뷰 요약에 대해 공손한 답변을 작성하세요.\n리뷰요약:{summary}"
+    "다음 식당 리뷰 요약에 대해 공손한 답변을 작성하세요.\n리뷰요약:{summary}"
 )
 chain3 = LLMChain(llm=openai, prompt=prompt3, output_key="reply")
 
