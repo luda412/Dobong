@@ -3,3 +3,6 @@
 test.py
 Documents
 .env
+
+# Python virtual environment
+venv/
