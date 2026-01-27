@@ -6,3 +6,4 @@ Documents
 
 # Python virtual environment
 venv/
+.venv/
