@@ -50,13 +50,17 @@ prompt6 = PromptTemplate.from_template(
 # step 1: 리뷰 번역 체인
 translate_chain_component = prompt1 | openai_llm | StrOutputParser()
 
-# step 2: 번여
-translate_chain_component = prompt1 | openai_llm | StrOutputParser()
+# step 2: 번역된 리뷰 요약 체인
+summarize_chain_component = prompt2 | openai_llm | StrOutputParser()
 
-translate_chain_component = prompt1 | openai_llm | StrOutputParser()
+# step 3: 감성 점수 평가 체인
+sentiment_score_chain_component = prompt3 | openai_llm | StrOutputParser()
 
-translate_chain_component = prompt1 | openai_llm | StrOutputParser()
+# step 4: 언어 식별 체인
+language_detect_chain_component = prompt4 | openai_llm | StrOutputParser()
 
-translate_chain_component = prompt1 | openai_llm | StrOutputParser()
+# step 5: 첫 번째 답변 생성 체인
+reply1_chain_component = prompt5 | openai_llm | StrOutputParser()
 
-translate_chain_component = prompt1 | openai_llm | StrOutputParser()
+# step 6: 두 번째 답변 (한국어 번역) 생성 체인
+reply2_chain_component = prompt6 | openai_llm | StrOutputParser()
