@@ -18,5 +18,7 @@ output_parser = StrOutputParser()
 
 #LLM 체인 구성
 chain = prompt | llm | output_parser
-result = chain.invoke({"input": "hi, what is your name?"})
+
+content = '코딩'
+result = chain.invoke({"input": content + "에 대한 시를 써줘"})
 print(result)
