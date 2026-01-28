@@ -7,3 +7,4 @@ Documents
 # Python virtual environment
 venv/
 .venv/
+llama-2-7b-chat.ggmlv3.q5_K_S.bin
