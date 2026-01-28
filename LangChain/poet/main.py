@@ -29,5 +29,7 @@ st.write('시의 주제는', content)
 
 #시 작성 요청하기
 if st.button('시 작성 요청하기'):
-    result = chain.invoke({"input": content + '에 대한 시를 써줘'})
-    st.write(result)
+    # with 아래에 즉 invoke와 write가 실행이 끝날 때까지 spinner가 실행
+    with st.spinner('Wait for it...'):
+        result = chain.invoke({"input": content + '에 대한 시를 써줘'})
+        st.write(result)
