@@ -64,3 +64,45 @@ reply1_chain_component = prompt5 | openai_llm | StrOutputParser()
 
 # step 6: 두 번째 답변 (한국어 번역) 생성 체인
 reply2_chain_component = prompt6 | openai_llm | StrOutputParser()
+
+# RunnablePassthrough.assign을 사용하여 각 단계의 출력을 다음 단계의 입력으로 전달하고,
+# 중간 결과들을 딕셔너리에 누적한다.
+# lambda x의 값에는 '현재 까지의 상태 딕셔너리'가 들어있음
+combined_lcel_chain = (
+    RunnablePassthrough.assign(
+        # 입력: {'review': '원본 리뷰 텍스트'}
+        # translate_chain_component는 'review' 키를 사용하여 호출
+        # 출력: {'review': '...', 'translation':'번역된 텍스트'}
+        translation = lambda x: translate_chain_component.invoke({'review': x["review"]})
+        # 1. 입력 상태 딕셔너리 x를 받는다.
+        # 2. x['review']를 꺼내 번역 체인을 실행한다.
+        # 3. 결과 문자열을 translation이라는 새 키로 붙인다.
+        # 4. 원래 있던 review 키는 그대로 유지한다.
+        # 그래서 출력 될 때(다음 단계로 넘어가는 값) 
+        # {
+        # "review": "원본 리뷰",
+        # "translation": "번역된 텍스트"
+        # } 딕셔너리가 이렇게 넘어가서 다음에서 lambda x에 이런 형태로 전달됨.
+    )
+    | RunnablePassthrough.assign(
+        # 입력: {'review': '...', 'translation':'번역된 텍스트'}
+        # summarize_chain_component와 sentiment_score_chain_component는 'translation' 키를 사용
+        # language_detect_chain_component는 원본 'review' 키를 사용
+        # 출력: {'review': '...', 'translation':'...', 'summary':'요약된 텍스트', 'sentiment_score':'감성 점수', 'language':'언어'}
+        summary = lambda x: summarize_chain_component.invoke({'translation': x["translation"]}),
+        sentiment_score = lambda x: sentiment_score_chain_component.invoke({'translation': x['translation']}),
+        language = lambda x: language_detect_chain_component.invoke({'review': x['review']})
+    )
+    | RunnablePassthrough.assign(
+        # 입력: {'review': '...', 'translation':'...', 'summary':'요약된 텍스트', 'sentiment_score':'점수', 'language':'감지된 언어'}
+        # reply1_chain_component는 'language'와 'summary' 키를 사용
+        # 출력: {'review': '...', 'translation':'...', 'summary':'...', 'sentiment_score':'...', 'language':'...', 'reply1':'첫 번째 답변(원본 언어, 공손한 답변)'}
+        reply1 = lambda x: reply1_chain_component.invoke({'language':x['language'], 'summary': x['summary']})
+    )
+    | RunnablePassthrough.assign(
+        # 입력: {'review': '...', 'translation':'...', 'summary':'...', 'sentiment_score':'...', 'language':'...', 'reply1':'첫 번째 답변(원본 언어, 공손한 답변)'}
+        # reply2_chain_component는 'reply2' 키를 사용
+        # 출력: {'review': '...', 'translation':'...', 'summary':'...', 'sentiment_score':'...', 'language':'...', 'reply1':'...', 'reply2':'두 번째 답변(첫 번째 답변 한국어로 번역)'}
+        reply2 = lambda x: reply2_chain_component.invoke({'reply1': x['reply1']})
+    )
+)
