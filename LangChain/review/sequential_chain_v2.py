@@ -106,3 +106,25 @@ combined_lcel_chain = (
         reply2 = lambda x: reply2_chain_component.invoke({'reply1': x['reply1']})
     )
 )
+
+# 숙박 시설 리뷰 입력
+review_text = """
+The hotel was clean and the staff were very helpful.
+The location was convenient, close to many attractions.
+However, the room was a bit small and breakfast options were limited.
+Overall, a decent stay but there is room for improvement.
+"""
+
+# 체인 실행 및 결과 출력
+try:
+    # .invoke() 메서드에 초기 입력을 딕셔너리 형태로 전달.
+    result = combined_lcel_chain.invoke(input={'review':review_text})
+    # 결과 딕셔너리에서 각 키를 사용하여 값을 출력
+    print(f'translation 결과: {result.get("translation", "N/A")} \n')
+    print(f'summary 결과: {result.get("summary", "N/A")} \n')
+    print(f'sentiment_score 결과: {result.get("sentiment_score", "N/A")} \n')
+    print(f'language 결과: {result.get("language", "N/A")} \n')
+    print(f'reply1 결과: {result.get("reply1", "N/A")} \n')
+    print(f'reply2 결과: {result.get("reply2", "N/A")} \n')
+except Exception as e:
+    print(f'Error: {e}')
